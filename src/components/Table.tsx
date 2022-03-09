@@ -1,12 +1,23 @@
+import { useEffect, useState } from "react"
 import Client from "../core/Client"
 import { editIcon, trashIcon } from "./Icons"
 
 interface TableProps {
     clients: Client[]
+    selectedClient?: (client: Client) => void
+    excludeClient?: (client: Client) => void
 }
 
 
 export default function Table(props: TableProps) {
+
+    const [showActions, setShowActions] = useState(false)
+
+    useEffect(()=>{
+        setShowActions(true)
+    }, [showActions])
+
+    
 
     function renderHeader() {
         return (
@@ -14,7 +25,7 @@ export default function Table(props: TableProps) {
                 <th className="text-left p-4">Código</th>
                 <th className="text-left p-4">Nome</th>
                 <th className="text-left p-4">Idade</th>
-                <th className="p-4">Ações</th>
+                {showActions && (<th className="p-4">Ações</th>)}
             </tr>
         )
     }
@@ -27,33 +38,48 @@ export default function Table(props: TableProps) {
                     <td className="text-left p-4">{client.id}</td>
                     <td className="text-left p-4">{client.name}</td>
                     <td className="text-left p-4">{client.age}</td>
-                    <td>{renderActions(client)}</td>
+                    {showActions && (<>{renderActions(client)}</>)}
                 </tr>
             )
         })
     }
 
+    
+
+
     function renderActions(client: Client) {
+
         return (
             <td className="flex justify-center">
-                <button className={`
-                    flex justify-center items-center
-                    text-green-600 rounded-full
-                    hover:bg-purple-50 p-2 m-1
-                `}>
-                    {editIcon}
-                </button>
 
-                <button className={`
+                {props.selectedClient && (
+                    <button 
+                    onClick={() => props.selectedClient?.(client)}
+                    className={`
+                     flex justify-center items-center
+                     text-green-600 rounded-full
+                     hover:bg-purple-50 p-2 m-1
+                 `}>
+                        {editIcon}
+                    </button>
+                )}
+
+                {props.excludeClient && (
+                    <button 
+                    onClick={() => props.excludeClient?.(client)}
+                    className={`
                     flex justify-center items-center
                     text-red-500 rounded-full
                     hover:bg-purple-50 p-2 m-1
                 `}>
-                    {trashIcon}
-                </button>
+                        {trashIcon}
+                    </button>
+                )}
             </td>
         )
     }
+
+    
 
     return (
         <table className="w-full rounded-xl overflow-hidden">
