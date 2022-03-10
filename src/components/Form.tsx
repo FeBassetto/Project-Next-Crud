@@ -5,13 +5,15 @@ import FormInput from "./FormInput";
 
 interface FormProps {
     client: Client
+    canceled?: () => any
+    switchClient?: (client: Client) => any
 }
 
 export default function Form(props: FormProps) {
 
     const id = props.client?.id
     const [name, setName] = useState(props.client?.name ?? '')
-    const [age, setAge] = useState(props.client?.age ?? '')
+    const [age, setAge] = useState(props.client?.age ?? null)
 
     return (
         <div>
@@ -37,11 +39,17 @@ export default function Form(props: FormProps) {
             />
 
             <div className="flex justify-end mt-7">
-                <Button color="blue" className="mr-2">
+                <Button 
+                buttonOnclick={() => props.switchClient?.(new Client(name, age, id))}
+                color="blue" 
+                className="mr-2"
+                >
                     {id ? 'Alterar' : 'Salvar'}
                 </Button>
 
-                <Button color="gray" >
+                <Button 
+                color="gray" 
+                buttonOnclick={props.canceled}>
                     Cancelar
                 </Button>
             </div>
