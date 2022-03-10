@@ -1,6 +1,6 @@
 
 interface ButtonProps{
-    color?: string
+    color?: 'green' | 'blue' | 'gray'
     className?: string
     children: any
 }
@@ -8,11 +8,11 @@ interface ButtonProps{
 
 export default function Button(props: ButtonProps){
 
-    const colorBtn = props.color?? 'blue'
+    const buttonColor = props.color ?? 'gray'
 
     return(
         <button className={`
-            bg-gradient-to-r from-${colorBtn}-400 to-${colorBtn}-700
+            bg-gradient-to-r from-${buttonColor}-400 to-${buttonColor}-700
             text-white px-4 py-2 rounded-md
             ${props.className}
         `}>
